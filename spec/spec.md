@@ -125,9 +125,14 @@
 - 统一接口（建议）：
   - `fetch_quote(ticker) -> Dict`
   - `fetch_history(ticker, granularity, lookback) -> List[Dict]`
+  - `fetch_intraday_1m(ticker, range) -> List[Dict]`
   - `fetch_fundamentals(ticker) -> Dict`
   - `fetch_options(ticker) -> Dict`
   - `fetch_news(ticker, window) -> List[Dict]`
+ - 实现细节（当前 POC）：
+   - `quote`：优先 `yfinance`（fast_info/info），缺失时回退 Yahoo v7 `/finance/quote`。
+   - `symbol 映射`：点号改为短横（如 `BRK.B`→`BRK-B`）。
+   - `intraday_1m`：优先 `yfinance`，失败时回退 Yahoo v8 `/finance/chart`（`range=1d&interval=1m`）。
 
 ## 新闻抓取与摘要（POC 简化）
 - Provider 选择（按最少依赖）：
@@ -165,8 +170,8 @@
 ## POC 最小化实现（聚焦核心功能）
 - 步骤：
   1. 运行 Reddit 抓取，得到 `normalized` 数据。
-  2. 提取 Ticker，计算热度，选 Top 10，输出 `wsb_top10_tickers.json`。
-  3. 对 Top 10：抓取 `quote` 与 `history_1d`（`lookback=1y`）。
+  2. 提取 Ticker，调用 LLM（gpt-5，medium）返回 Top 10（含 `discussion_highlights`），输出 `stage1_top10.json`。
+  3. 对 Top 10：抓取 `quote`（含 Yahoo v7 fallback）、`history_1d`（近 30 天）、`intraday_1m`（当日，若可用），输出 `stage2_enriched.json`。
   4. 抓取最近新闻并生成 `news.json` 与 `news_summary.json`。
   5. 应用简化触发规则，生成 `alerts.json`；满足条件则发邮件通知订阅者。
 - 依赖：`requests`, `yfinance`（默认）；如需新闻加强，可加 `alphavantage`/`finnhub` KEY。
@@ -176,6 +181,7 @@
 - `outputs/wsb_top10_tickers.json`：`[{ticker, score, mentions, post_score_sum, num_comments_sum}]`
 - `outputs/stocks/<T>/quote.json`：`{symbol, price, change_pct, volume, market_cap, timestamp}`（字段可因 Provider 有限而为空）
 - `outputs/stocks/<T>/history_1d.json`：`[{date, open, high, low, close, volume}]`
+ - `outputs/stocks/<T>/intraday_1m.json`：`[{datetime, open, high, low, close, volume}]`
 - `outputs/stocks/<T>/news_summary.json`：`{top_headlines:[{title, source, time, url}], count, overall_sentiment, key_points:[...]}`
 - `outputs/alerts.json`：`[{ticker, attention, severity, reasons:[...], top_headline, price_change_pct, news_count, run_ts}]`
 
@@ -231,9 +237,9 @@
   - 输入：无（运行时从 Reddit 获取）。
   - 输出：`outputs/stage1_top10.json`（核心）、可选 `outputs/stocks/<T>/news.json` 与 `outputs/stocks/<T>/news_summary.json`。
 - 组件 2：股票详情（Stock Details）
-  - 职责：为 Top10 拉取最新的指标数据（POC：quote + 1y 日线），并补充合并进阶段 1 的 JSON。
+  - 职责：为 Top10 拉取最新的指标数据（POC：quote + 近 30 天日线 + 当日 1 分钟线），并补充合并进阶段 1 的 JSON。
   - 输入：Top10 Ticker 列表。
-  - 输出：`outputs/stocks/<T>/quote.json`、`outputs/stocks/<T>/history_1d.json`、以及合并后的 `outputs/stage2_enriched.json`。
+  - 输出：`outputs/stocks/<T>/quote.json`、`outputs/stocks/<T>/history_1d.json`、`outputs/stocks/<T>/intraday_1m.json`（如可用），以及合并后的 `outputs/stage2_enriched.json`。
 - 组件 3：综合分析与告警（Analyzer）
   - 职责：调用 LLM 逐个分析是否需要 Attention，在 JSON 为每个股票打标 `attention_needed` 并生成 `email content`，触发邮件通知。
   - 输入：阶段 2 合并后的 JSON。
@@ -246,37 +252,40 @@
   - 可选：`summarize_news(items) -> news_summary`
 - 组件 2：
   - `fetch_quote(ticker) -> Dict`
-  - `fetch_history(ticker, granularity="1d", lookback="1y") -> List[Dict]`
+  - `fetch_history(ticker, granularity="1d", lookback="30d") -> List[Dict]`
+  - `fetch_intraday_1m(ticker, range="1d") -> List[Dict]`
   - `enrich_stage1(stage1_items, quotes, histories) -> stage2_enriched`
 - 组件 3：
   - `llm_attention_decision(stage2_enriched_item) -> {attention_needed, severity, reasons, email}`
   - `send_alert_email(ticker, email_subject, email_body, recipients) -> bool`
 
 ## 运行顺序（每小时）
-1. 组件 1：抓取 Reddit → 调用 LLM 提取 Top10 与关注点 → 可选拉取新闻并摘要 → 写入 `stage1_top10.json`。
-2. 组件 2：为 Top10 拉取行情与 1y 日线历史并合并到 JSON（`stage2_enriched.json`）。
+1. 组件 1：抓取 Reddit → 调用 LLM 提取 Top10 与关注点（含讨论摘要）→ 可选拉取新闻并摘要 → 写入 `stage1_top10.json`。
+2. 组件 2：为 Top10 拉取 `quote` + 近 30 天 `history_1d` + 当日 `intraday_1m` 并合并到 JSON（`stage2_enriched.json`）。
 3. 组件 3：调用 LLM 逐个给出 Attention 决定与邮件内容 → 写入 `stage3_analyzed.json` 与 `alerts.json` → 触发邮件（如需要）。
 
 ## LLM Provider 与配置（POC）
 - 环境变量：
   - `LLM_PROVIDER`：`openai`（默认）或 `ollama/azure/anthropic`。
-  - `LLM_MODEL`：如 `gpt-4o-mini` 或 `gpt-4.1-mini`（低成本为主）。
+  - `LLM_MODEL`：默认 `gpt-5`（中等推理能力）。
   - `LLM_API_KEY`：对应 Provider 的 Key。
   - 可选：`LLM_BASE_URL`（自托管或代理）。
-- 成本控制：Top10 任务仅需简短摘要与标签；提示词限制在数百 Tokens，避免长上下文。
+- 成本控制：Top10 任务使用精简英文提示与裁剪后的帖子内容；限制输入长度在数百 Tokens 级别。
 
 ## 阶段输出 JSON 合同（核心）
 - 阶段 1（`outputs/stage1_top10.json`）：
   - `run_ts`: ISO 时间戳
   - `items`: 数组（最多 10 项），每项：
     - `ticker`: 股票代码（字符串）
-    - `attention_points`: 数组（2–5 条，精炼短句）
+    - `attention_points`: 数组（2–5 条，英文，精炼短句）
+    - `discussion_highlights`: 数组（2–4 条，英文，来自近期讨论的简短要点）
     - `sources`: 可选，数组（Reddit `permalink` 或 `id`）
     - `heat_score`: 可选，0–10 浮点（LLM 估计或简单计数）
 - 阶段 2（`outputs/stage2_enriched.json`）：
   - 基于阶段 1 的结构，给每项新增：
     - `data.quote`: `{price, change_pct, open, high, low, previous_close, volume, market_cap, currency, timestamp}`（字段缺失可为空）
-    - `data.history_1d`: 数组 `[{date, open, high, low, close, volume}]`（近 1 年）
+    - `data.history_1d`: 数组 `[{date, open, high, low, close, volume}]`（近 30 天）
+    - `data.intraday_1m`: 数组 `[{datetime, open, high, low, close, volume}]`（当日 1 分钟线，如可用）
     - 可选：`data.fundamentals`（如 Provider 可用）
 - 阶段 3（`outputs/stage3_analyzed.json`）：
   - 在阶段 2 的每项追加：
@@ -289,13 +298,12 @@
 
 ## LLM 提示词（Prompt）示例（POC）
 - 阶段 1（提取 Top10 与关注点）：
-  - 系统：你是金融助手，基于 r/wallstreetbets 近期帖子，提取最热的股票并总结需要关注的点。保持客观与简洁。
-  - 用户输入：`normalized_posts`（标题、selftext、score、num_comments、created_utc、permalink）
-  - 要求输出：`items[ {ticker, attention_points(<=5), sources(permalinks, <=3), heat_score(0-10)} ]`，最多 10。
+  - 系统（英文）：You are a financial assistant. From recent r/wallstreetbets posts, extract the top tickers and summarize why they are active. Return JSON with `items` (max 10): `ticker`, `attention_points` (<=5), `discussion_highlights` (<=4), `sources` (<=3 permalinks), `heat_score` (0–10).
+  - 用户输入：`normalized_posts`（title、selftext（裁剪）、score、num_comments、created_utc、flair、permalink）。
+  - 输出：纯 JSON（英文）。
 - 阶段 3（Attention 与邮件）：
-  - 系统：你是风控助手，根据聚合的行情/历史/新闻与阶段 1 的关注点，判断是否需要关注。使用简化客观规则，不做主观建议。
-  - 用户输入：`stage2_enriched_item`
-  - 要求输出：`{attention_needed, severity, reasons(<=4), email{subject, body(<=10行)}}`。
+  - 系统（英文）：You are a risk-control assistant. Using price/volume history, recent news, and Stage 1 attention points, decide if this stock needs attention. Apply objective signals, no subjective advice. Return only JSON: `{attention_needed, severity ('watch'|'alert'), reasons (<=4), email {subject, body (<=10 lines)}}`。
+  - 用户输入：`stage2_enriched_item`（含 30d 日线与当日 1m 分钟线）。
 
 ## Attention 判定的最小信号（POC）
 - Reddit 热度：Top10 中且 `score >= 5`。
@@ -429,11 +437,14 @@ def run():
 ## 测试计划（轻量）
 - 单元测试：
   - `stage2_enrich` 合并与 `change_pct` 计算。
+  - `yfinance_client`：点号转短横符号映射（如 `BRK.B`→`BRK-B`）。
+  - `quote` 回退：yfinance 为空时使用 Yahoo v7 `/finance/quote`。
+  - `intraday_1m`：yfinance 与 Yahoo v8 `/finance/chart` 回退路径。
   - `email_sender` 在本地 SMTP/捕获方式下的发送成功路径。
 - 集成测试：
   - 以小样本 `normalized_posts` 运行端到端，检查输出文件存在与关键字段非空。
 - LLM 测试：
-  - 使用少量帖子验证能稳定返回 10 个以内的 `ticker` 与简短关注点；如异常，降级为规则提取。
+  - 使用少量帖子验证能稳定返回不超过 10 个 `ticker` 与英文关注点/讨论摘要；如异常，降级为规则提取（fallback）。
 
 ## 风险与边界
 - LLM 可能产生幻觉：通过 Ticker 校验与关注点简化降低风险。

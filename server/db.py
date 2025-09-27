@@ -4,7 +4,7 @@ from typing import Tuple, Dict, Any, List
 
 
 def connect(sqlite_path: str | None = None) -> sqlite3.Connection:
-    path = sqlite_path or os.environ.get("SQLITE_PATH", "data/attention.db")
+    path = sqlite_path or os.environ.get("DB_PATH") or os.environ.get("SQLITE_PATH", "data/attention.db")
     return sqlite3.connect(path)
 
 
@@ -46,4 +46,3 @@ def get_alerts_for_run(conn: sqlite3.Connection, run_id: int) -> List[Dict[str, 
             }
         )
     return items
-

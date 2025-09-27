@@ -166,7 +166,7 @@ def fetch_history_1d(ticker: str, period: str = "1y") -> List[Dict[str, Any]]:
     return records
 
 
-def fetch_intraday_1m(ticker: str, range: str = "1d") -> List[Dict[str, Any]]:
+def fetch_intraday_1m(ticker: str, day_range: str = "1d") -> List[Dict[str, Any]]:
     """Fetch today's 1-minute bars. Try yfinance first, then Yahoo chart API as fallback.
 
     Returns a list of records: {datetime, open, high, low, close, volume}
@@ -217,7 +217,7 @@ def fetch_intraday_1m(ticker: str, range: str = "1d") -> List[Dict[str, Any]]:
     try:
         url = "https://query1.finance.yahoo.com/v8/finance/chart/" + symbol
         headers = {"User-Agent": "StockAnalysis/1.0 (intraday fallback)"}
-        resp = requests.get(url, params={"range": range, "interval": "1m"}, headers=headers, timeout=10)
+        resp = requests.get(url, params={"range": day_range, "interval": "1m"}, headers=headers, timeout=10)
         resp.raise_for_status()
         data = resp.json()
         result = (data.get("chart", {}) or {}).get("result", [])

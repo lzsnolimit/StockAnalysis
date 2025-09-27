@@ -46,16 +46,16 @@ def test_sqlite_write_and_query(tmp_path):
 
     conn = sqlite3.connect(str(db_path))
     cur = conn.cursor()
-    cur.execute("SELECT run_id, run_ts, alerts_count FROM runs WHERE run_id=?", (run_id,))
+    cur.execute("SELECT run_id, run_ts, alerts_count, created_time FROM runs WHERE run_id=?", (run_id,))
     row = cur.fetchone()
     assert row is not None
     assert row[1] == "2025-09-27T10:00:00Z"
     assert row[2] == 1
+    assert row[3] is not None
 
-    cur.execute("SELECT ticker, attention_needed, severity FROM alerts WHERE run_id=? ORDER BY ticker", (run_id,))
+    cur.execute("SELECT ticker, attention_needed, severity, created_at, created_time FROM alerts WHERE run_id=? ORDER BY ticker", (run_id,))
     rows = cur.fetchall()
     assert len(rows) == 2
     # AAPL attention_needed=1, TSLA=0
-    assert rows[0][0] == "AAPL" and rows[0][1] == 1
-    assert rows[1][0] == "TSLA" and rows[1][1] == 0
-
+    assert rows[0][0] == "AAPL" and rows[0][1] == 1 and rows[0][3] is not None and rows[0][4] is not None
+    assert rows[1][0] == "TSLA" and rows[1][1] == 0 and rows[1][3] is not None and rows[1][4] is not None

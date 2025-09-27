@@ -30,7 +30,7 @@ def stage2_enrich(stage1: Dict[str, Any]) -> Dict[str, Any]:
             data["error_history_1d"] = True
         # Fetch intraday 1m (today)
         try:
-            data["intraday_1m"] = fetch_intraday_1m(ticker, range="1d")
+            data["intraday_1m"] = fetch_intraday_1m(ticker, day_range="1d")
         except Exception:
             data["intraday_1m"] = []
             data["error_intraday_1m"] = True
