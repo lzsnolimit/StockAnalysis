@@ -22,10 +22,12 @@ class LLMClient:
         model = model or os.environ.get("LLM_MODEL") or "gpt-5"
         # Reasoning effort (OpenAI reasoning models): low|medium|high
         reasoning_effort = os.environ.get("LLM_REASONING_EFFORT", "medium")
-        model_kwargs = {"reasoning_effort": reasoning_effort}
 
-        # Initialize ChatOpenAI (LangChain), extra kwargs are passed through
-        self.llm = ChatOpenAI(model=model, temperature=temperature, model_kwargs=model_kwargs)
+        # Initialize ChatOpenAI; prefer explicit param to avoid warnings, fallback to model_kwargs
+        try:
+            self.llm = ChatOpenAI(model=model, temperature=temperature, reasoning_effort=reasoning_effort)
+        except TypeError:
+            self.llm = ChatOpenAI(model=model, temperature=temperature, model_kwargs={"reasoning_effort": reasoning_effort})
 
     def top10_from_posts(self, posts: List[Dict[str, Any]]) -> Dict[str, Any]:
         """Ask LLM to extract top tickers and attention points from normalized posts.
@@ -60,8 +62,11 @@ class LLMClient:
             })
         human = HumanMessage(content=json.dumps({"posts": payload}, ensure_ascii=False))
 
-        resp = self.llm.invoke([system, human])
-        text = resp.content.strip()
+        try:
+            resp = self.llm.invoke([system, human])
+            text = resp.content.strip()
+        except Exception:
+            return {"items": []}
         # Expect valid JSON; if not valid, return empty structure to let caller fallback
         try:
             import json
@@ -90,8 +95,16 @@ class LLMClient:
         import json
 
         human = HumanMessage(content=json.dumps(item, ensure_ascii=False))
-        resp = self.llm.invoke([system, human])
-        text = resp.content.strip()
+        try:
+            resp = self.llm.invoke([system, human])
+            text = resp.content.strip()
+        except Exception:
+            return {
+                "attention_needed": False,
+                "severity": "watch",
+                "reasons": ["LLM 调用失败"],
+                "email": {"subject": "", "body": ""},
+            }
         try:
             data = json.loads(text)
             # Minimal validation
