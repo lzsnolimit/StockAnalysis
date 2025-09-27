@@ -1,9 +1,21 @@
 import os
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from server.db import connect, get_latest_run_full, get_items_for_run_all
 
 
 app = FastAPI(title="Stock Analysis API", version="1.0.0")
+
+# Configure CORS for local/frontend access
+origins_env = os.environ.get("CORS_ORIGINS", "*")
+origins = [o.strip() for o in origins_env.split(",") if o.strip()]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/health")
@@ -33,4 +45,3 @@ if __name__ == "__main__":
 
     port = int(os.environ.get("API_PORT", "8000"))
     uvicorn.run("server.fastapi_app:app", host="0.0.0.0", port=port, reload=False)
-
