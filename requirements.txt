@@ -8,3 +8,5 @@ pytest
 flask
 yfinance
 python-dotenv
+fastapi
+uvicorn

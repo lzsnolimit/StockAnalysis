@@ -3391,17 +3391,17 @@
         ]
       },
       "analysis": {
-        "attention_needed": true,
+        "attention_needed": false,
         "severity": "watch",
         "reasons": [
-          "Max social heat (10/10) with multiple WSB YOLO/capitulation threads",
-          "Extreme recent volatility: ~3.2 -> 10.5 -> 7.1 -> 9+ over weeks",
-          "Today -3.1% with choppy intraday action; momentum fragile",
-          "Elevated volume regime persists (165M today; hundreds of millions recently)"
+          "Price down ~3.1% today (meets strong-signal threshold)",
+          "No major events (earnings/M&A/SEC/guidance/scandal) indicated",
+          "Volume (~165M) not ≥2x recent daily average",
+          "Social/WSB chatter and options flow lack a concrete catalyst"
         ],
         "email": {
-          "subject": "OPEN Watch: max heat + high volatility; -3.1% today",
-          "body": "Ticker: OPEN (Opendoor) — Watch triggered.\nHeat score 10/10; WSB YOLO/capitulation posts trending.\nPrice: 8.81 (-3.1% vs prior close); intraday choppy.\nVolume: 165M today; still elevated (recently 200–700M/day).\n1M range: ~3.2 -> 10.5 -> 7.1 -> 9.1 (whipsaws).\nAttention points: heavy options flow, averaging down, momentum trades.\nRisk: hype/flow-driven reversals; potential gap/vol spikes.\nAction: tighten risk limits; monitor options/hedges and headlines."
+          "subject": "OPEN watch: -3% move amid hype, no confirmed catalyst",
+          "body": "OPEN fell ~3.1% to $8.81 today.\nVolume ~165M, not ≥2x recent average.\nNo major catalysts (earnings/M&A/SEC/guidance) in last 24h.\nWSB chatter/options flow elevated but not a credible catalyst.\nAction: Monitor only; no alert unless another strong signal emerges."
         }
       }
     },
@@ -6796,17 +6796,17 @@
         ]
       },
       "analysis": {
-        "attention_needed": true,
-        "severity": "alert",
+        "attention_needed": false,
+        "severity": "watch",
         "reasons": [
-          "Heat score 9.0 signals elevated social/retail attention",
-          "News pulse: retail posts on potential TSMC/Apple ties and AI/foundry turnaround",
-          "Price +4.4% today to 35.50; ~20% week-over-week, >40% since 9/16",
-          "Volume exceptional: 164M/296M/268M over last 3 sessions, far above recent norms"
+          "Price up ~4.4% today (>=3%) — single strong signal",
+          "Volume ~265M is elevated but not >=2x recent average",
+          "News flow largely Reddit chatter; <3 credible items in 48h",
+          "No confirmed major events (earnings/M&A/regulatory/guidance)"
         ],
         "email": {
-          "subject": "INTC Alert: High heat, rumor-driven momentum, heavy volume",
-          "body": "INTC $35.50 (+4.4% d/d)\nHeat score 9.0; retail chatter on TSMC/Apple and AI/foundry narrative.\nVolume 268M today; 164M/296M/268M last 3 sessions (unusually high).\nMulti-session surge (~+20% w/w; >40% since 9/16).\nSignals: momentum + short-cover risk; headline sensitivity high.\nAction: tighten risk limits; monitor for reversals and volatility halts."
+          "subject": "INTC status: Watch — single strong signal, no confirmed catalyst",
+          "body": "INTC is up ~4.4% today, meeting one strong-signal threshold.\nVolume is elevated (~265M) but not ≥2x recent average.\nNews mentions (TSMC/Apple) appear to be Reddit rumors, not confirmed.\nNo major events (earnings/M&A/regulatory/guidance) identified.\nRecommendation: Watch only; await credible headlines or a volume spike.\nMonitor for official statements from Intel/TSMC/Apple.\n"
         }
       }
     },
@@ -10200,17 +10200,17 @@
         ]
       },
       "analysis": {
-        "attention_needed": true,
+        "attention_needed": false,
         "severity": "watch",
         "reasons": [
-          "Heat score 8.0 indicates elevated speculative attention",
-          "Price up 4.0% day-over-day (440.40 vs 423.39)",
-          "Volume ~100.1M, above recent median daily volume",
-          "Social/news pulse: multiple WSB posts (YOLO puts, options activity)"
+          "+4.0% price move today (strong)",
+          "Volume ~100M, not ≥2x recent average",
+          "No major events (earnings/M&A/regulatory) in data",
+          "News flow is Reddit posts, not credible sources"
         ],
         "email": {
-          "subject": "TSLA Watch: +4% day, heat 8, elevated options chatter",
-          "body": "TSLA flag for watch.\nPrice: 440.40 (+4.0% d/d).\nVolume: ~100.1M (above recent median).\nHeat score: 8.0; WSB YOLO puts/covered calls chatter.\n1M move: ~331 -> 440 (~+33%).\nMeme-flow risk; volatility elevated.\nMonitor for reversal/hedge needs.\nNo major fundamental catalyst in feed."
+          "subject": "TSLA – Watch: 4% move but no confirmed catalysts",
+          "body": "TSLA moved +4.0% today to 440.40.\nVolume ~100M, roughly in line with recent days (not ≥2x).\nNo major events (earnings, M&A, regulatory, guidance) identified.\nNews items provided are Reddit posts (not credible catalysts).\nHeat score 8.0; options/meme activity noted but unverified.\nAction: Watch only; no escalation.\nTrigger for alert: add ≥1 more strong signal (2x volume, 3+ credible news) or any major event.\nMonitoring price/volume and headlines ongoing."
         }
       }
     },
@@ -13604,17 +13604,17 @@
         ]
       },
       "analysis": {
-        "attention_needed": true,
+        "attention_needed": false,
         "severity": "watch",
         "reasons": [
-          "Elevated social heat (score 8.0)",
-          "Rumor-driven headlines on OpenAI partnership/investment (WSB posts)",
-          "Speculative 0DTE/YOLO options chatter increasing short-term risk",
-          "Price/volume stable today (+0.28%, ~148M shares) — no spike, so watch not alert"
+          "Price move +0.28% (<3% threshold)",
+          "Volume ~148M, not >=2x recent average",
+          "Only Reddit chatter; no 3+ credible news items in 48h",
+          "No major events (earnings/M&A/regulatory/guidance) flagged"
         ],
         "email": {
-          "subject": "NVDA Watch: elevated heat on OpenAI chatter; price stable",
-          "body": "NVDA +0.28% to 178.19; volume ~148M (no spike).\nSocial heat high (score 8.0).\nWSB posts pushing OpenAI partnership/investment rumor.\nMentions of 0DTE/YOLO activity elevate near-term gap risk.\nNo abnormal intraday dislocation detected.\nAction: WATCH; monitor for confirmation, volume surge, or >2% move.\nSources: linked WSB threads."
+          "subject": "NVDA status: No immediate alert — rumors unconfirmed",
+          "body": "Quick update on NVDA.\nPrice +0.28% today; below 3% signal threshold.\nVolume ~148M, roughly in line with recent days; not unusual.\n\"OpenAI partnership\" chatter is from Reddit, not confirmed by credible sources.\nNo major events (earnings, M&A, SEC, guidance) detected within 24h.\nWe’ll keep on watch and escalate if confirmed news or stronger price/volume triggers appear."
         }
       }
     },
@@ -17008,17 +17008,17 @@
         ]
       },
       "analysis": {
-        "attention_needed": true,
+        "attention_needed": false,
         "severity": "watch",
         "reasons": [
-          "Heat score 8.0 indicates elevated retail attention",
-          "Social/news pulse: AI budget hike and WSB big-gain posts",
-          "Rapid run-up (~+40% since mid‑Aug) with a -2.0% day adds volatility risk",
-          "Recent volume spikes (8/28, 9/10, 9/23) 2-4x typical levels"
+          "Price move -2.0% (< 3% threshold)",
+          "Volume ~15.9M, not >=2x recent average",
+          "Only Reddit chatter; no 3+ credible news items",
+          "No major events (earnings/M&A/regulatory/guidance) indicated"
         ],
         "email": {
-          "subject": "BABA Watch: High heat, momentum, and volume spikes",
-          "body": "Ticker: BABA — set to WATCH due to elevated attention.\nHeat score: 8.0 (high).\nPrice: 171.91 (-2.0% d/d); ~+40% over ~1 month.\nVolume: Spikes 8/28 (82.2M), 9/10 (50.1M), 9/23 (52.6M) vs ~8–20M typical.\nNews pulse: AI budget hike; WSB big-gain posts; China tech rebound theme.\nSignal: Crowd-driven momentum; risk of sharp swings.\nAction: Monitor for outsized moves, gap opens, and volume surges.\nStops/limits: Review exposure and tighten risk if volatility rises."
+          "subject": "BABA: Watch status — no immediate action required",
+          "body": "Ticker: BABA\nStatus: Watch (no alert)\nPrice change today: -2.0% (below 3% threshold)\nVolume: ~15.9M (not unusual vs recent)\nNo verified major events or 3+ credible news items\nReddit-driven chatter noted but not sufficient\nMonitoring for earnings, guidance, M&A, or regulatory catalysts"
         }
       }
     },
@@ -20412,17 +20412,17 @@
         ]
       },
       "analysis": {
-        "attention_needed": true,
+        "attention_needed": false,
         "severity": "watch",
         "reasons": [
-          "Elevated heat score 7.0 with active WSB chatter (news pulse post-ER)",
-          "Recent volume spikes (e.g., 57M on 2025-09-23 vs ~12–18M in Aug) signal heightened interest",
-          "Approx +34% 1M run-up followed by consolidation near 156–160 increases swing risk",
-          "Options described as pricey; market implying larger potential moves"
+          "No verified major event today (earnings/guidance not confirmed within 24h)",
+          "Price change +0.28% (<3% threshold)",
+          "Volume ~24.0M, not ≥2x recent average (near prior day ~24.0M)",
+          "Sources are Reddit posts, not ≥3 credible news items"
         ],
         "email": {
-          "subject": "MU Watch: heat 7.0, recent volume spikes, +34% 1M run-up",
-          "body": "MU set to WATCH.\nPrice: 157.27 (+0.3% d/d); intraday range ~1.9%.\nHeat score 7.0; multiple WSB posts post-ER.\nVolume elevated recently (57M on 9/23 vs Aug ~12–18M); today ~24M.\n~+34% since late Aug; consolidating near 156–160.\nPost-ER beat/strong guide and NVDA tie-ins cited.\nOptions pricey → implied move risk.\nMonitor for break >160 or <155 with volume.\nNo immediate ALERT; keep on radar."
+          "subject": "MU watch: no strong/major signals today",
+          "body": "MU closed ~+0.28% at $157.27; volume ~24.0M (not unusual).\nNo confirmed major event today (earnings/guidance within 24h not verified).\nStrong-signal thresholds not met: <3% move; volume not ≥2x avg.\nSources provided are Reddit posts, not credible newsflow.\nStatus: Watch only.\nTrigger attention if: credible catalyst hits, ≥3% move, or ≥2x volume.\n"
         }
       }
     },
@@ -23816,17 +23816,17 @@
         ]
       },
       "analysis": {
-        "attention_needed": true,
+        "attention_needed": false,
         "severity": "watch",
         "reasons": [
-          "One-day drop of 7.2% (110.53 vs 119.13)",
-          "Elevated social heat (7.0) with WSB bulls vs bearish puts",
-          "High turnover (24.2M) amid recent volatility regime",
-          "Event risk: regulatory filings/PPA conversion in focus"
+          "Price down ~7.2% today (1 strong signal)",
+          "No confirmation of major events (earnings, M&A, SEC, guidance, outage)",
+          "Volume not flagged as ≥2x recent average",
+          "Sources are Reddit chatter, not credible news items"
         ],
         "email": {
-          "subject": "OKLO Watch: -7.2% with high chatter and event risk",
-          "body": "Ticker: OKLO\nPrice: 110.53 (-7.2% d/d)\nVolume: 24.2M (elevated vs recent trend)\nHeat: 7.0; WSB catalysts/$200 calls vs bearish puts\nVolatility remains high after mid-Sept spike\nNarrative: Nuclear + AI demand; reg approvals unconfirmed\nRisk: Regulatory filings/PPA conversion catalyst window\nAction: Place on watch; reassess on any filings/PPAs\n"
+          "subject": "OKLO: Watch status — sharp drop but no confirmed catalysts",
+          "body": "Team,\nOKLO fell ~7.2% today to ~$110.53, but we don’t see confirmed catalysts.\nNo earnings/M&A/SEC actions or guidance changes in provided data.\nVolume doesn’t appear ≥2x recent average.\nSources are Reddit posts, not credible news.\nPer criteria: 1 strong signal, no major — no attention flag.\nWe’ll keep on watch.\n"
         }
       }
     },
@@ -27211,17 +27211,17 @@
         ]
       },
       "analysis": {
-        "attention_needed": true,
+        "attention_needed": false,
         "severity": "watch",
         "reasons": [
-          "Elevated social heat: score 7.0 with viral WSB posts (anecdotal demand, Amex chatter)",
-          "Price up +2.5% today (176.3 vs 172.0), near-term momentum after recent rebound",
-          "Post-9/4 gap-down on 36.8M shares keeps volatility/squeeze risk elevated",
-          "Today’s volume (~3.7M) below ~6.0M 10D avg—no confirmation spike yet"
+          "Price change ~+2.5% (<3% strong-signal threshold)",
+          "Volume ~3.7M not >=2x recent average",
+          "Only 2 social posts; no credible news >=3 items in 48h",
+          "No major events (earnings/M&A/SEC/guidance) indicated"
         ],
         "email": {
-          "subject": "LULU Watch: Rising social heat (+2.5%), post-gap volatility",
-          "body": "LULU showing elevated attention: Heat 7.0 with viral WSB posts (demand anecdote, Amex chatter).\nPrice +2.5% to ~176.3; momentum building post recent rebound.\nVolume ~3.7M vs ~6.0M 10D avg (no spike yet).\nContext: Large 9/4 gap-down (36.8M vol); volatility remains elevated.\nRisk: Retail-driven chase/squeeze into seasonal demand; rumor quality unverified.\nAction: Set to WATCH; monitor for volume expansion and any official Amex news.\nFocus on pre-market/open for gap risk and tape acceleration."
+          "subject": "LULU: No immediate action — signals below thresholds",
+          "body": "Summary: LULU shows no qualifying major or multiple strong signals today.\n- Price +~2.5% (<3% threshold)\n- Volume ~3.7M (not unusual; <2x avg)\n- Only social-media chatter; no credible news catalysts\n- No earnings/M&A/SEC/guidance events detected\nAction: Keep on watch. Reassess if price move ≥3%, volume spikes, or credible news hits."
         }
       }
     },
@@ -30615,17 +30615,17 @@
         ]
       },
       "analysis": {
-        "attention_needed": true,
+        "attention_needed": false,
         "severity": "watch",
         "reasons": [
-          "Elevated retail heat (score 6.0) with multiple recent WSB posts (news pulse).",
-          "Two high-volume breakout days: 2025-09-18 (163.7M, +3.2%) and 2025-09-21 (105.5M, +4.3%).",
-          "1-month climb ~+11% (≈229.7 to 255.5) — momentum/crowding risk.",
-          "Today’s move modest (-0.55%) with normal tape; elevated risk persists from prior spikes."
+          "No major events (earnings/M&A/SEC/guidance/outage) indicated",
+          "Price move today -0.55% (<3% threshold)",
+          "Volume ~45.6M, not >=2x recent average",
+          "Only Reddit chatter; no credible news/catalyst in last 48h"
         ],
         "email": {
-          "subject": "AAPL Watch: Elevated retail heat + recent volume/price spikes",
-          "body": "AAPL flagged: WATCH\nPrice 255.46 (-0.55% vs 256.87 prior close)\nHeat score 6.0; WSB chatter uptick (3 posts this week)\nVolume spikes: 9/18 163.7M (+3.2%), 9/21 105.5M (+4.3%)\n~1M change +11% (≈229.7 -> 255.5)\nNarrative: margin-levered common shares pitched as “safer” than options\nCurrent tape normal; prior momentum/flow risk elevated\nMonitor positioning, leverage, and further news pulses"
+          "subject": "AAPL: No immediate action needed (watch status)",
+          "body": "Summary: No major or strong signals detected for AAPL.\nPrice move today: -0.55% (below 3% threshold).\nVolume ~45.6M; not unusual vs recent averages.\nNo credible news in last 48h; sources are Reddit only.\nNo concrete catalyst identified.\nSeverity: Watch.\nRecommendation: Continue routine monitoring."
         }
       }
     },
@@ -33779,138 +33779,30 @@
         "attention_needed": true,
         "severity": "alert",
         "reasons": [
-          "One-day price surge +14.9% (from 168.32 to 193.35) with intraday spike to ~197",
-          "Volume ~14.5M vs ~2.5M recent avg (~6x) — unusual activity",
-          "News pulse: ~$50B go-private rumor (M&A premium/odds risk) circulating",
-          "Heat score 6.0 indicates elevated attention"
+          "Price up ~14.9% today (>=3% threshold)",
+          "Volume >2x recent daily average (unusual activity)",
+          "Move tied to go-private rumor; source not yet credible/confirmed",
+          "No confirmed M&A or SEC filing provided"
         ],
         "email": {
-          "subject": "EA Alert: +15% on ~$50B go-private rumor; volume ~6x avg",
-          "body": "EA spiked on ~$50B go-private rumor (M&A).\nLast: 193.35 (+14.9% d/d); day range 170.08–197.33.\nVolume: ~14.5M vs ~2.5M avg (~6x).\nHeat score: 6.0; social/news pulse elevated.\nSource: https://www.reddit.com/r/wallstreetbets/comments/1nr9dow/\nPrice embeds deal premium; gap-reversal risk if denied.\nMonitor for confirmations/denials; watch headlines.\nConsider tighter limits/hedges into next session."
+          "subject": "EA: Sharp surge on unverified go-private rumor — monitor risk",
+          "body": "EA jumped ~14.9% to 193.35 on heavy volume (~14.4M; >2x recent avg).\nMove appears linked to an unverified ~$50B go-private rumor (Reddit source).\nNo confirmed M&A/SEC filing provided; reversal risk is high.\nActions: monitor for press release/8-K; tighten stops/hedges; size prudently.\nWatch key levels: ~190–197 from the spike range.\nFlag immediately if credible outlets confirm or deny the deal."
         }
       }
     }
   ],
   "alerts": [
     {
-      "ticker": "OPEN",
-      "severity": "watch",
-      "reasons": [
-        "Max social heat (10/10) with multiple WSB YOLO/capitulation threads",
-        "Extreme recent volatility: ~3.2 -> 10.5 -> 7.1 -> 9+ over weeks",
-        "Today -3.1% with choppy intraday action; momentum fragile",
-        "Elevated volume regime persists (165M today; hundreds of millions recently)"
-      ],
-      "email_subject": "OPEN Watch: max heat + high volatility; -3.1% today",
-      "email_body": "Ticker: OPEN (Opendoor) — Watch triggered.\nHeat score 10/10; WSB YOLO/capitulation posts trending.\nPrice: 8.81 (-3.1% vs prior close); intraday choppy.\nVolume: 165M today; still elevated (recently 200–700M/day).\n1M range: ~3.2 -> 10.5 -> 7.1 -> 9.1 (whipsaws).\nAttention points: heavy options flow, averaging down, momentum trades.\nRisk: hype/flow-driven reversals; potential gap/vol spikes.\nAction: tighten risk limits; monitor options/hedges and headlines."
-    },
-    {
-      "ticker": "INTC",
-      "severity": "alert",
-      "reasons": [
-        "Heat score 9.0 signals elevated social/retail attention",
-        "News pulse: retail posts on potential TSMC/Apple ties and AI/foundry turnaround",
-        "Price +4.4% today to 35.50; ~20% week-over-week, >40% since 9/16",
-        "Volume exceptional: 164M/296M/268M over last 3 sessions, far above recent norms"
-      ],
-      "email_subject": "INTC Alert: High heat, rumor-driven momentum, heavy volume",
-      "email_body": "INTC $35.50 (+4.4% d/d)\nHeat score 9.0; retail chatter on TSMC/Apple and AI/foundry narrative.\nVolume 268M today; 164M/296M/268M last 3 sessions (unusually high).\nMulti-session surge (~+20% w/w; >40% since 9/16).\nSignals: momentum + short-cover risk; headline sensitivity high.\nAction: tighten risk limits; monitor for reversals and volatility halts."
-    },
-    {
-      "ticker": "TSLA",
-      "severity": "watch",
-      "reasons": [
-        "Heat score 8.0 indicates elevated speculative attention",
-        "Price up 4.0% day-over-day (440.40 vs 423.39)",
-        "Volume ~100.1M, above recent median daily volume",
-        "Social/news pulse: multiple WSB posts (YOLO puts, options activity)"
-      ],
-      "email_subject": "TSLA Watch: +4% day, heat 8, elevated options chatter",
-      "email_body": "TSLA flag for watch.\nPrice: 440.40 (+4.0% d/d).\nVolume: ~100.1M (above recent median).\nHeat score: 8.0; WSB YOLO puts/covered calls chatter.\n1M move: ~331 -> 440 (~+33%).\nMeme-flow risk; volatility elevated.\nMonitor for reversal/hedge needs.\nNo major fundamental catalyst in feed."
-    },
-    {
-      "ticker": "NVDA",
-      "severity": "watch",
-      "reasons": [
-        "Elevated social heat (score 8.0)",
-        "Rumor-driven headlines on OpenAI partnership/investment (WSB posts)",
-        "Speculative 0DTE/YOLO options chatter increasing short-term risk",
-        "Price/volume stable today (+0.28%, ~148M shares) — no spike, so watch not alert"
-      ],
-      "email_subject": "NVDA Watch: elevated heat on OpenAI chatter; price stable",
-      "email_body": "NVDA +0.28% to 178.19; volume ~148M (no spike).\nSocial heat high (score 8.0).\nWSB posts pushing OpenAI partnership/investment rumor.\nMentions of 0DTE/YOLO activity elevate near-term gap risk.\nNo abnormal intraday dislocation detected.\nAction: WATCH; monitor for confirmation, volume surge, or >2% move.\nSources: linked WSB threads."
-    },
-    {
-      "ticker": "BABA",
-      "severity": "watch",
-      "reasons": [
-        "Heat score 8.0 indicates elevated retail attention",
-        "Social/news pulse: AI budget hike and WSB big-gain posts",
-        "Rapid run-up (~+40% since mid‑Aug) with a -2.0% day adds volatility risk",
-        "Recent volume spikes (8/28, 9/10, 9/23) 2-4x typical levels"
-      ],
-      "email_subject": "BABA Watch: High heat, momentum, and volume spikes",
-      "email_body": "Ticker: BABA — set to WATCH due to elevated attention.\nHeat score: 8.0 (high).\nPrice: 171.91 (-2.0% d/d); ~+40% over ~1 month.\nVolume: Spikes 8/28 (82.2M), 9/10 (50.1M), 9/23 (52.6M) vs ~8–20M typical.\nNews pulse: AI budget hike; WSB big-gain posts; China tech rebound theme.\nSignal: Crowd-driven momentum; risk of sharp swings.\nAction: Monitor for outsized moves, gap opens, and volume surges.\nStops/limits: Review exposure and tighten risk if volatility rises."
-    },
-    {
-      "ticker": "MU",
-      "severity": "watch",
-      "reasons": [
-        "Elevated heat score 7.0 with active WSB chatter (news pulse post-ER)",
-        "Recent volume spikes (e.g., 57M on 2025-09-23 vs ~12–18M in Aug) signal heightened interest",
-        "Approx +34% 1M run-up followed by consolidation near 156–160 increases swing risk",
-        "Options described as pricey; market implying larger potential moves"
-      ],
-      "email_subject": "MU Watch: heat 7.0, recent volume spikes, +34% 1M run-up",
-      "email_body": "MU set to WATCH.\nPrice: 157.27 (+0.3% d/d); intraday range ~1.9%.\nHeat score 7.0; multiple WSB posts post-ER.\nVolume elevated recently (57M on 9/23 vs Aug ~12–18M); today ~24M.\n~+34% since late Aug; consolidating near 156–160.\nPost-ER beat/strong guide and NVDA tie-ins cited.\nOptions pricey → implied move risk.\nMonitor for break >160 or <155 with volume.\nNo immediate ALERT; keep on radar."
-    },
-    {
-      "ticker": "OKLO",
-      "severity": "watch",
-      "reasons": [
-        "One-day drop of 7.2% (110.53 vs 119.13)",
-        "Elevated social heat (7.0) with WSB bulls vs bearish puts",
-        "High turnover (24.2M) amid recent volatility regime",
-        "Event risk: regulatory filings/PPA conversion in focus"
-      ],
-      "email_subject": "OKLO Watch: -7.2% with high chatter and event risk",
-      "email_body": "Ticker: OKLO\nPrice: 110.53 (-7.2% d/d)\nVolume: 24.2M (elevated vs recent trend)\nHeat: 7.0; WSB catalysts/$200 calls vs bearish puts\nVolatility remains high after mid-Sept spike\nNarrative: Nuclear + AI demand; reg approvals unconfirmed\nRisk: Regulatory filings/PPA conversion catalyst window\nAction: Place on watch; reassess on any filings/PPAs\n"
-    },
-    {
-      "ticker": "LULU",
-      "severity": "watch",
-      "reasons": [
-        "Elevated social heat: score 7.0 with viral WSB posts (anecdotal demand, Amex chatter)",
-        "Price up +2.5% today (176.3 vs 172.0), near-term momentum after recent rebound",
-        "Post-9/4 gap-down on 36.8M shares keeps volatility/squeeze risk elevated",
-        "Today’s volume (~3.7M) below ~6.0M 10D avg—no confirmation spike yet"
-      ],
-      "email_subject": "LULU Watch: Rising social heat (+2.5%), post-gap volatility",
-      "email_body": "LULU showing elevated attention: Heat 7.0 with viral WSB posts (demand anecdote, Amex chatter).\nPrice +2.5% to ~176.3; momentum building post recent rebound.\nVolume ~3.7M vs ~6.0M 10D avg (no spike yet).\nContext: Large 9/4 gap-down (36.8M vol); volatility remains elevated.\nRisk: Retail-driven chase/squeeze into seasonal demand; rumor quality unverified.\nAction: Set to WATCH; monitor for volume expansion and any official Amex news.\nFocus on pre-market/open for gap risk and tape acceleration."
-    },
-    {
-      "ticker": "AAPL",
-      "severity": "watch",
-      "reasons": [
-        "Elevated retail heat (score 6.0) with multiple recent WSB posts (news pulse).",
-        "Two high-volume breakout days: 2025-09-18 (163.7M, +3.2%) and 2025-09-21 (105.5M, +4.3%).",
-        "1-month climb ~+11% (≈229.7 to 255.5) — momentum/crowding risk.",
-        "Today’s move modest (-0.55%) with normal tape; elevated risk persists from prior spikes."
-      ],
-      "email_subject": "AAPL Watch: Elevated retail heat + recent volume/price spikes",
-      "email_body": "AAPL flagged: WATCH\nPrice 255.46 (-0.55% vs 256.87 prior close)\nHeat score 6.0; WSB chatter uptick (3 posts this week)\nVolume spikes: 9/18 163.7M (+3.2%), 9/21 105.5M (+4.3%)\n~1M change +11% (≈229.7 -> 255.5)\nNarrative: margin-levered common shares pitched as “safer” than options\nCurrent tape normal; prior momentum/flow risk elevated\nMonitor positioning, leverage, and further news pulses"
-    },
-    {
       "ticker": "EA",
       "severity": "alert",
       "reasons": [
-        "One-day price surge +14.9% (from 168.32 to 193.35) with intraday spike to ~197",
-        "Volume ~14.5M vs ~2.5M recent avg (~6x) — unusual activity",
-        "News pulse: ~$50B go-private rumor (M&A premium/odds risk) circulating",
-        "Heat score 6.0 indicates elevated attention"
+        "Price up ~14.9% today (>=3% threshold)",
+        "Volume >2x recent daily average (unusual activity)",
+        "Move tied to go-private rumor; source not yet credible/confirmed",
+        "No confirmed M&A or SEC filing provided"
       ],
-      "email_subject": "EA Alert: +15% on ~$50B go-private rumor; volume ~6x avg",
-      "email_body": "EA spiked on ~$50B go-private rumor (M&A).\nLast: 193.35 (+14.9% d/d); day range 170.08–197.33.\nVolume: ~14.5M vs ~2.5M avg (~6x).\nHeat score: 6.0; social/news pulse elevated.\nSource: https://www.reddit.com/r/wallstreetbets/comments/1nr9dow/\nPrice embeds deal premium; gap-reversal risk if denied.\nMonitor for confirmations/denials; watch headlines.\nConsider tighter limits/hedges into next session."
+      "email_subject": "EA: Sharp surge on unverified go-private rumor — monitor risk",
+      "email_body": "EA jumped ~14.9% to 193.35 on heavy volume (~14.4M; >2x recent avg).\nMove appears linked to an unverified ~$50B go-private rumor (Reddit source).\nNo confirmed M&A/SEC filing provided; reversal risk is high.\nActions: monitor for press release/8-K; tighten stops/hedges; size prudently.\nWatch key levels: ~190–197 from the spike range.\nFlag immediately if credible outlets confirm or deny the deal."
     }
   ]
 }
