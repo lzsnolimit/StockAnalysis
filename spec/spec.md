@@ -553,3 +553,38 @@ def run():
   - 访问控制：POC 暂不做鉴权；若外网暴露，建议加入简单的 IP 白名单或只在内网可见。
 - 监控：
   - API `GET /health` 用于存活检查；可加简单日志记录请求量与错误率。
+
+---
+
+## 系统更新（2025-09-27）
+
+### 阶段 3（Analyzer）改进
+- 并发：默认 10 线程（环境变量 `STAGE3_WORKERS`，默认 `10`）。每线程独立 LLM 客户端（避免线程安全问题），保持输入顺序。
+- 判定严格度：通过 `ATTENTION_STRICTNESS=relaxed|balanced|strict` 动态调整提示词逻辑（默认 `balanced`）。
+- 写库与邮件：阶段 3 完成后直接写入 SQLite（`data/attention.db` 或 `DB_PATH/SQLITE_PATH`），并触发邮件发送（见“邮件发送（Composio）”）。
+
+### 阶段 4（Notifier）新增
+- 独立脚本：`scripts/component_stage4_notify.py`。
+- 行为：读取 `outputs/stage3_analyzed.json`（可配置 `STAGE4_INPUT`），对所有 `attention_needed=true` 的项发送邮件，输出到 `outputs/stage4_email_summary.json`（可配置 `STAGE4_OUTPUT`）。
+
+### API 扩展（FastAPI）
+- 新增服务入口：`server/fastapi_app.py`。保留 `server/app.py`（Flask）作为 POC。
+- 新端点：
+  - `GET /runs/latest/items`：返回最新一次 run 的全部股票（含非关注项）
+    - 响应：`{ run: {run_id, run_ts, alerts_count, top10_count}, items: [{ticker, attention_needed, severity, reasons, email_subject, email_body, price, change_pct, news_count, attention_points, heat_score}] }`
+- 现有端点：
+  - `GET /health`、`GET /alerts/latest`、`GET /alerts/latest/summary`
+- CORS：允许前端访问，`CORS_ORIGINS`（逗号分隔，默认 `*`）。
+
+### 邮件发送（Composio）
+- 工具：Composio 的 `GMAIL_SEND_EMAIL`（OpenAI tools 调用）。
+- 收件人：优先 `ALERT_RECIPIENTS`（逗号分隔），否则读取 `SUBSCRIBERS_CSV`（默认 `config/subscribers.csv`）。
+- 环境：
+  - `COMPOSIO_USER_ID`：需与绑定 Gmail 的用户一致，否则会出现 “No connected account found”。
+  - `EMAIL_LOG_LEVEL=DEBUG|INFO`、`EMAIL_DRY_RUN=1`（干跑）、`EMAIL_LOG_FILE`（可选）。
+- 失败处理：最佳努力，单封失败记录到汇总但不影响整体流程。
+
+### 其他配置与约定
+- LLM：`LLM_MODEL`（默认 `gpt-5`）、`LLM_API_KEY`、`LLM_BASE_URL`、`LLM_REASONING_EFFORT`（默认 `medium`）。
+- 数据库路径：`DB_PATH`（优先）或 `SQLITE_PATH`（默认 `data/attention.db`）。
+- API 端口：`API_PORT`（默认 `8000`）。
