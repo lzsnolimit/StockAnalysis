@@ -9,6 +9,7 @@ if ROOT not in sys.path:
     sys.path.append(ROOT)
 
 from utils.io_helpers import read_json, write_json
+from utils.env import load_env
 
 
 def stage3_analyze(enriched: Dict[str, Any], llm) -> Dict[str, Any]:
@@ -76,9 +77,12 @@ def main() -> None:
     from utils.llm_client import LLMClient
     from scripts.db_writer import write_run_and_alerts
 
+    # Load .env so env variables like STAGE3_WORKERS apply
+    load_env()
     input_path = os.environ.get("STAGE3_INPUT", "outputs/stage2_enriched.json")
     output_path = os.environ.get("STAGE3_OUTPUT", "outputs/stage3_analyzed.json")
-    workers = int(os.environ.get("STAGE3_WORKERS", "1"))
+    # Default to 10 workers if not specified
+    workers = int(os.environ.get("STAGE3_WORKERS", "10"))
 
     enriched = read_json(input_path)
 
