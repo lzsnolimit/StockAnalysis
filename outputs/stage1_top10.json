@@ -1,0 +1,134 @@
+{
+  "items": [
+    {
+      "ticker": "THE",
+      "attention_points": [
+        "Reddit讨论热度较高",
+        "帖子评分与评论较多"
+      ],
+      "sources": [
+        "/r/wallstreetbets/comments/1nrbady/weekend_discussion_thread_for_the_weekend_of/",
+        "/r/wallstreetbets/comments/1nrlqxq/the_angel_and_the_devil_on_your_shoulder/",
+        "/r/wallstreetbets/comments/1nrvnxd/upcoming_oklo_catalysts_that_could_push_it_to_200/"
+      ],
+      "heat_score": 2647.652
+    },
+    {
+      "ticker": "S",
+      "attention_points": [
+        "Reddit讨论热度较高",
+        "帖子评分与评论较多"
+      ],
+      "sources": [
+        "/r/wallstreetbets/comments/1ns0lmv/honestly_i_dont_know_what_im_doing_i_just_copy/",
+        "/r/wallstreetbets/comments/1nryvxg/lost_it_all_shorting_qmmm/",
+        "/r/wallstreetbets/comments/1nrvnxd/upcoming_oklo_catalysts_that_could_push_it_to_200/"
+      ],
+      "heat_score": 2024.883
+    },
+    {
+      "ticker": "TO",
+      "attention_points": [
+        "Reddit讨论热度较高",
+        "帖子评分与评论较多"
+      ],
+      "sources": [
+        "/r/wallstreetbets/comments/1nrbady/weekend_discussion_thread_for_the_weekend_of/",
+        "/r/wallstreetbets/comments/1nryvxg/lost_it_all_shorting_qmmm/",
+        "/r/wallstreetbets/comments/1nr9dow/videogame_giant_electronic_arts_near_roughly_50/"
+      ],
+      "heat_score": 1834.298
+    },
+    {
+      "ticker": "AND",
+      "attention_points": [
+        "Reddit讨论热度较高",
+        "帖子评分与评论较多"
+      ],
+      "sources": [
+        "/r/wallstreetbets/comments/1nryvxg/lost_it_all_shorting_qmmm/",
+        "/r/wallstreetbets/comments/1nrlqxq/the_angel_and_the_devil_on_your_shoulder/",
+        "/r/wallstreetbets/comments/1nrvnxd/upcoming_oklo_catalysts_that_could_push_it_to_200/"
+      ],
+      "heat_score": 1646.099
+    },
+    {
+      "ticker": "A",
+      "attention_points": [
+        "Reddit讨论热度较高",
+        "帖子评分与评论较多"
+      ],
+      "sources": [
+        "/r/wallstreetbets/comments/1nryvxg/lost_it_all_shorting_qmmm/",
+        "/r/wallstreetbets/comments/1nrvnxd/upcoming_oklo_catalysts_that_could_push_it_to_200/",
+        "/r/wallstreetbets/comments/1nrkffb/look_mom_i_drew_a_portfoliogon_with_house_money/"
+      ],
+      "heat_score": 1567.224
+    },
+    {
+      "ticker": "T",
+      "attention_points": [
+        "Reddit讨论热度较高",
+        "帖子评分与评论较多"
+      ],
+      "sources": [
+        "/r/wallstreetbets/comments/1nrbady/weekend_discussion_thread_for_the_weekend_of/",
+        "/r/wallstreetbets/comments/1ns0lmv/honestly_i_dont_know_what_im_doing_i_just_copy/",
+        "/r/wallstreetbets/comments/1nryvxg/lost_it_all_shorting_qmmm/"
+      ],
+      "heat_score": 1497.629
+    },
+    {
+      "ticker": "D",
+      "attention_points": [
+        "Reddit讨论热度较高",
+        "帖子评分与评论较多"
+      ],
+      "sources": [
+        "/r/wallstreetbets/comments/1nrbady/weekend_discussion_thread_for_the_weekend_of/",
+        "/r/wallstreetbets/comments/1nr18hv/weekly_earnings_thread_929_103/",
+        "/r/wallstreetbets/comments/1nryvxg/lost_it_all_shorting_qmmm/"
+      ],
+      "heat_score": 1291.954
+    },
+    {
+      "ticker": "ON",
+      "attention_points": [
+        "Reddit讨论热度较高",
+        "帖子评分与评论较多"
+      ],
+      "sources": [
+        "/r/wallstreetbets/comments/1nrbady/weekend_discussion_thread_for_the_weekend_of/",
+        "/r/wallstreetbets/comments/1ns0lmv/honestly_i_dont_know_what_im_doing_i_just_copy/",
+        "/r/wallstreetbets/comments/1nrlqxq/the_angel_and_the_devil_on_your_shoulder/"
+      ],
+      "heat_score": 1277.357
+    },
+    {
+      "ticker": "E",
+      "attention_points": [
+        "Reddit讨论热度较高",
+        "帖子评分与评论较多"
+      ],
+      "sources": [
+        "/r/wallstreetbets/comments/1ns0lmv/honestly_i_dont_know_what_im_doing_i_just_copy/",
+        "/r/wallstreetbets/comments/1nryvxg/lost_it_all_shorting_qmmm/",
+        "/r/wallstreetbets/comments/1nrvnxd/upcoming_oklo_catalysts_that_could_push_it_to_200/"
+      ],
+      "heat_score": 1214.732
+    },
+    {
+      "ticker": "OF",
+      "attention_points": [
+        "Reddit讨论热度较高",
+        "帖子评分与评论较多"
+      ],
+      "sources": [
+        "/r/wallstreetbets/comments/1nrbady/weekend_discussion_thread_for_the_weekend_of/",
+        "/r/wallstreetbets/comments/1nrvnxd/upcoming_oklo_catalysts_that_could_push_it_to_200/",
+        "/r/wallstreetbets/comments/1nrki5j/30k_yolo_call_on_open/"
+      ],
+      "heat_score": 1093.439
+    }
+  ]
+}

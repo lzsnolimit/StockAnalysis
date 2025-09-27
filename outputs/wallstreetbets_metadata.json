@@ -1,0 +1,49 @@
+{
+  "total_records_exported": 994,
+  "unique_ids": 994,
+  "duplicates_removed": 0,
+  "earliest_created_utc": 1554148570.0,
+  "latest_created_utc": 1758997560.0,
+  "top_10_authors_by_count": [
+    [
+      "AutoModerator",
+      107
+    ],
+    [
+      "OPINION_IS_UNPOPULAR",
+      98
+    ],
+    [
+      "wsbapp",
+      34
+    ],
+    [
+      "[deleted]",
+      21
+    ],
+    [
+      "DeepFuckingValue",
+      17
+    ],
+    [
+      "PaperHandsTheDip",
+      8
+    ],
+    [
+      "MotorizedDoucheCanoe",
+      8
+    ],
+    [
+      "zjz",
+      6
+    ],
+    [
+      "keenfeed",
+      6
+    ],
+    [
+      "game_stone",
+      6
+    ]
+  ]
+}
