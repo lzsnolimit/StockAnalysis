@@ -10,7 +10,7 @@ if ROOT not in sys.path:
 
 from utils.io_helpers import read_json, write_json
 from utils.env import load_env
-from utils.email_composio import send_stage3_emails
+from utils.email_composio import send_stage3_bulk_email
 
 
 def stage3_analyze(enriched: Dict[str, Any], llm) -> Dict[str, Any]:
@@ -97,14 +97,14 @@ def main() -> None:
     run_id = write_run_and_alerts(None, analyzed)
     print(f"Stage3: analyzed {len(analyzed.get('items', []))} items with workers={workers} -> {output_path}; stored run_id={run_id}")
 
-    # Send emails for attention items (best-effort; errors are logged but do not crash)
+    # Send a single bulk email for attention items (best-effort)
     try:
-        mail_summary = send_stage3_emails(analyzed)
+        mail_summary = send_stage3_bulk_email(analyzed)
         sent_count = len(mail_summary.get("sent", []))
         err_count = len(mail_summary.get("errors", []))
-        print(f"Stage3: email dispatch summary: sent={sent_count}, errors={err_count}")
+        print(f"Stage3: bulk email summary: sent={sent_count}, errors={err_count}")
     except Exception as e:
-        print(f"Stage3: email dispatch failed: {e}")
+        print(f"Stage3: bulk email dispatch failed: {e}")
 
 
 if __name__ == "__main__":

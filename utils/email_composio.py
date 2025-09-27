@@ -136,3 +136,47 @@ def send_stage3_emails(analyzed: Dict[str, Any]) -> Dict[str, Any]:
             logger.exception(f"Error sending attention email for {item.get('ticker')}: {e}")
             summary["errors"].append({"ticker": item.get("ticker"), "error": str(e)})
     return summary
+
+
+def send_stage3_bulk_email(analyzed: Dict[str, Any]) -> Dict[str, Any]:
+    """Send a single email that aggregates all attention-needed items.
+
+    Subject: comma-separated tickers of attention items.
+    Body: concatenation of each item's email subject/body, prefixed with the ticker.
+    """
+    _setup_logging()
+    recipients = _load_recipients()
+    if not recipients:
+        logger.log(_get_log_level(), "No email recipients configured; skip bulk sending.")
+        return {"sent": [], "errors": [{"error": "no recipients configured"}]}
+
+    items = [
+        it for it in (analyzed.get("items", []) or [])
+        if (it.get("analysis") or {}).get("attention_needed")
+    ]
+    tickers = [it.get("ticker") for it in items if it.get("ticker")]
+    if not items:
+        logger.log(_get_log_level(), "No attention items; skip bulk sending.")
+        return {"sent": [], "errors": []}
+
+    subject = ",".join(tickers)
+    parts: List[str] = []
+    for it in items:
+        t = it.get("ticker")
+        decision = (it.get("analysis") or {})
+        sev = decision.get("severity") or "watch"
+        email = decision.get("email") or {}
+        subj = email.get("subject") or f"Attention: {t}"
+        body = email.get("body") or ""
+        parts.append(f"=== {t} ({sev}) ===\n{subj}\n\n{body}\n")
+    full_body = "\n".join(parts)
+
+    try:
+        logger.log(_get_log_level(), f"Sending bulk email for tickers: {tickers}")
+        print(f"[Email] bulk: subject={subject}, recipients={recipients}, items={len(items)}")
+        result = send_email_via_composio(subject, full_body, recipients)
+        return {"sent": [{"tickers": tickers, "result": result}], "errors": []}
+    except Exception as e:
+        logger.exception(f"Error sending bulk email: {e}")
+        print(f"[Email] bulk error: {e}")
+        return {"sent": [], "errors": [{"error": str(e)}]}
