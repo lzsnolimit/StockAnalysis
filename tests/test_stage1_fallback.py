@@ -19,6 +19,6 @@ def test_stage1_fallback_extracts_tickers():
     assert "AAPL" in tickers
     assert "TSLA" in tickers
     assert "BRK.B" in tickers
-    # Check attention points exist
+    # Check attention points and discussion highlights exist
     assert all(len(it["attention_points"]) >= 2 for it in items)
-
+    assert all(isinstance(it.get("discussion_highlights"), list) and len(it.get("discussion_highlights")) >= 1 for it in items)

@@ -14,6 +14,7 @@ def _fallback_top10_from_posts(posts: List[Dict[str, Any]]) -> Dict[str, Any]:
     import re
     stop = {"I", "IT", "USA", "ALL", "DD", "YOLO", "WSB", "AI"}
     ticker_stats: Dict[str, Dict[str, Any]] = {}
+    per_ticker_posts: Dict[str, List[Dict[str, Any]]] = {}
     pattern = re.compile(r"\$?[A-Za-z]{1,5}(?:\.[A-Za-z]{1,3})?")
 
     for p in posts[:500]:
@@ -33,6 +34,12 @@ def _fallback_top10_from_posts(posts: List[Dict[str, Any]]) -> Dict[str, Any]:
             st["comments"] += comments
             if link and len(st["sources"]) < 3 and link not in st["sources"]:
                 st["sources"].append(link)
+            per_ticker_posts.setdefault(t, []).append({
+                "title": title,
+                "score": score,
+                "num_comments": comments,
+                "permalink": link,
+            })
 
     ranked = []
     for t, st in ticker_stats.items():
@@ -41,10 +48,16 @@ def _fallback_top10_from_posts(posts: List[Dict[str, Any]]) -> Dict[str, Any]:
     ranked.sort(key=lambda x: x[1], reverse=True)
     items = []
     for t, heat, st in ranked[:10]:
-        points = ["Reddit讨论热度较高", "帖子评分与评论较多"]
+        points = ["High discussion activity on Reddit", "Many posts with higher scores/comments"]
+        # Build simple discussion highlights from top-scoring posts mentioning the ticker
+        posts_for_t = sorted(per_ticker_posts.get(t, []), key=lambda r: (r.get("score", 0), r.get("num_comments", 0)), reverse=True)
+        highlights = []
+        for r in posts_for_t[:3]:
+            highlights.append(f"{r.get('title')} (score={r.get('score')}, comments={r.get('num_comments')})")
         items.append({
             "ticker": t,
             "attention_points": points,
+            "discussion_highlights": highlights,
             "sources": st["sources"],
             "heat_score": round(heat, 3),
         })
@@ -68,6 +81,11 @@ def stage1_top10_from_posts(posts: List[Dict[str, Any]], llm) -> Dict[str, Any]:
             points = [str(p).strip() for p in points if str(p).strip()]
         else:
             points = []
+        highlights = item.get("discussion_highlights") or []
+        if isinstance(highlights, list):
+            highlights = [str(h).strip() for h in highlights if str(h).strip()]
+        else:
+            highlights = []
         sources = item.get("sources") or []
         if isinstance(sources, list):
             sources = [str(s) for s in sources][:3]
@@ -81,6 +99,7 @@ def stage1_top10_from_posts(posts: List[Dict[str, Any]], llm) -> Dict[str, Any]:
         items.append({
             "ticker": t,
             "attention_points": points,
+            "discussion_highlights": highlights,
             "sources": sources,
             "heat_score": heat,
         })

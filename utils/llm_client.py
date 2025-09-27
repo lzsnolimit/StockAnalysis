@@ -19,10 +19,13 @@ class LLMClient:
         if not api_key:
             raise RuntimeError("LLM_API_KEY/OPENAI_API_KEY is required for LLMClient")
         base_url = os.environ.get("LLM_BASE_URL")
-        model = model or os.environ.get("LLM_MODEL") or "gpt-4o-mini"
+        model = model or os.environ.get("LLM_MODEL") or "gpt-5"
+        # Reasoning effort (OpenAI reasoning models): low|medium|high
+        reasoning_effort = os.environ.get("LLM_REASONING_EFFORT", "medium")
+        model_kwargs = {"reasoning_effort": reasoning_effort}
 
-        # ChatOpenAI allows passing base_url via client options if needed; here we use env.
-        self.llm = ChatOpenAI(model=model, temperature=temperature)
+        # Initialize ChatOpenAI (LangChain), extra kwargs are passed through
+        self.llm = ChatOpenAI(model=model, temperature=temperature, model_kwargs=model_kwargs)
 
     def top10_from_posts(self, posts: List[Dict[str, Any]]) -> Dict[str, Any]:
         """Ask LLM to extract top tickers and attention points from normalized posts.
@@ -31,22 +34,31 @@ class LLMClient:
         """
         system = SystemMessage(
             content=(
-                "你是金融助手。基于 r/wallstreetbets 的帖子，提取最热的股票并总结需要关注的点。"
-                "输出一个 JSON 对象，字段 items 为数组，最多 10 个元素，每个元素包含: "
-                "ticker(字符串), attention_points(2-5条简短中文要点), sources(最多3个permalink), heat_score(0-10)。"
-                "只输出 JSON，不要其他文本。"
+                "You are a financial assistant. From recent r/wallstreetbets posts, extract the top 10 tickers and summarize why they are active."
+                " Return a pure JSON object with an `items` array (max 10), each element including:"
+                " ticker (string), attention_points (2–5 concise bullets), discussion_highlights (2–4 brief points summarizing recent discussions),"
+                " sources (up to 3 permalinks), heat_score (0–10)."
+                " Only output JSON — no extra text."
             )
         )
 
-        # Compress posts into a concise prompt to control token usage
-        lines: List[str] = []
-        for p in posts[:100]:  # cap for POC
-            title = p.get("title", "").strip()
-            score = p.get("score", 0)
-            comments = p.get("num_comments", 0)
-            link = p.get("permalink", "")
-            lines.append(f"- {title} | score={score} comments={comments} | {link}")
-        human = HumanMessage(content="\n".join(lines) or "无帖子")
+        # Provide richer structured inputs for better analysis
+        import json
+        def clip(s: str, max_len: int = 300) -> str:
+            s = (s or "").strip()
+            return s if len(s) <= max_len else s[:max_len] + "…"
+        payload: List[Dict[str, Any]] = []
+        for p in posts[:200]:  # cap input size for cost control
+            payload.append({
+                "title": p.get("title", ""),
+                "selftext": clip(p.get("selftext", ""), 500),
+                "score": int(p.get("score") or 0),
+                "num_comments": int(p.get("num_comments") or 0),
+                "created_utc": p.get("created_utc"),
+                "flair": p.get("flair") or p.get("link_flair_text"),
+                "permalink": p.get("permalink", ""),
+            })
+        human = HumanMessage(content=json.dumps({"posts": payload}, ensure_ascii=False))
 
         resp = self.llm.invoke([system, human])
         text = resp.content.strip()
@@ -69,9 +81,9 @@ class LLMClient:
         """
         system = SystemMessage(
             content=(
-                "你是风控助手。根据行情/历史/新闻与关注点，判断该股票是否需要关注。"
-                "采用简化客观规则（热度、新闻脉冲、涨跌幅、成交量异常），但最终给出明确布尔结果。"
-                "只输出 JSON：attention_needed(boolean), severity('watch'或'alert'), reasons(<=4条), email{subject, body(<=10行)}。"
+                "You are a risk-control assistant. Using price/volume history, recent news, and Stage 1 attention points, decide if this stock needs attention."
+                " Apply simple objective signals (heat, news pulses, price change, volume spikes) and produce a clear boolean result."
+                " Return only JSON: attention_needed (boolean), severity ('watch'|'alert'), reasons (<=4), email {subject, body (<=10 lines)}."
             )
         )
 
