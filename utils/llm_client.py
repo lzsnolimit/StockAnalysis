@@ -84,15 +84,49 @@ class LLMClient:
         Input item structure follows Stage 2 enriched JSON for a single ticker.
         Returns: {"attention_needed": bool, "severity": "watch|alert", "reasons": [str], "email": {"subject": str, "body": str}}
         """
+        # Strictness control: relaxed | balanced | strict (default: balanced)
+        strictness = (os.environ.get("ATTENTION_STRICTNESS") or "balanced").strip().lower()
+        if strictness not in {"relaxed", "balanced", "strict"}:
+            strictness = "balanced"
+
+        if strictness == "strict":
+            criteria = (
+                "You are a conservative trading risk assistant.\n"
+                "Decide attention conservatively: attention_needed=true ONLY if a MAJOR event OR strong momentum confirmed by multiple signals.\n"
+                "CRITERIA:\n"
+                "- MAJOR (any one): earnings today/24h; merger/acquisition; regulatory/SEC action; guidance change; severe outage/scandal.\n"
+                "- STRONG momentum (need >=2): |change_pct| >= 3%; volume >= 2x recent avg; clear intraday spike vs recent range; AND heat_score >= 8.\n"
+                "- MODERATE (need >=3): |change_pct| >= 2.5%; volume >= 1.7x; multi-day trend >8% with rising volume; Stage1 indicates concrete catalyst.\n"
+                "Defaults: If uncertain, set attention_needed=false.\n"
+            )
+        elif strictness == "relaxed":
+            criteria = (
+                "You are a pragmatic trading risk assistant aiming to surface a few high-confidence items per run.\n"
+                "CRITERIA:\n"
+                "- attention_needed=true if ANY MAJOR event OR STRONG momentum + social heat OR >=2 MODERATE signals.\n"
+                "- MAJOR (any one): earnings today/24h; merger/acquisition; regulatory/SEC action; guidance change; severe outage/scandal.\n"
+                "- STRONG + heat (any one): |change_pct| >= 2%; clear intraday spike; heavy options/YOLO flow noted; AND heat_score >= 7.\n"
+                "- MODERATE (need >=2): |change_pct| >= 1.5%; volume >= 1.5x; multi-day trend >5% with rising volume; Stage1 discussion indicates concrete catalyst; heat_score >= 8.\n"
+                "Defaults: If uncertain but heat_score >= 8 OR attention_points mention earnings/upgrade/downgrade/guidance, prefer attention_needed=true with severity='watch'.\n"
+            )
+        else:  # balanced
+            criteria = (
+                "You are a balanced trading risk assistant: avoid being too strict or too lenient.\n"
+                "Aim to flag only genuinely notable items.\n"
+                "CRITERIA:\n"
+                "- attention_needed=true if MAJOR event OR STRONG momentum + heat OR >=2 MODERATE signals.\n"
+                "- MAJOR (any one): earnings today/24h; merger/acquisition; regulatory/SEC action; guidance change; severe outage/scandal.\n"
+                "- STRONG + heat (need >=1 strong + heat): |change_pct| >= 2.5% OR volume >= 1.7x OR clear intraday spike; AND heat_score >= 7.\n"
+                "- MODERATE (need >=2): |change_pct| >= 2%; volume >= 1.5x; multi-day trend >6% with rising volume; Stage1 indicates concrete catalyst; heat_score >= 8.\n"
+                "Defaults: If uncertain, set attention_needed=false unless heat_score >= 9 AND catalyst is mentioned — then 'watch'.\n"
+            )
+
         system = SystemMessage(
             content=(
-                "You are a conservative risk-control assistant. Decide if this stock truly needs attention based on objective signals from the provided data.\n"
-                "STRICT CRITERIA (be selective): Set attention_needed=true ONLY if at least ONE MAJOR event OR at least TWO STRONG signals hold. Otherwise set false.\n"
-                "MAJOR events (any one): earnings release today/within 24h; merger/acquisition; regulatory/SEC action; major guidance change; severe outage/scandal.\n"
-                "STRONG signals (need >=2 if no major event): |price_change_today| >= 3%; unusual volume (>= 2x recent average); >= 3 credible news items in last 48h; Stage1 highlights indicate concrete catalyst (e.g., product launch, rating change).\n"
-                "If data is insufficient or ambiguous, default to attention_needed=false.\n"
-                "Severity: 'alert' only when attention_needed=true and signals are strong/major; else 'watch'.\n"
-                "Output ONLY JSON: {attention_needed:boolean, severity:'watch'|'alert', reasons:<=4 short bullets, email:{subject, body<=10 lines}}."
+                criteria
+                + "\nSeverity: 'alert' only when MAJOR or STRONG signals; else 'watch'.\n"
+                + "Output ONLY JSON: {attention_needed:boolean, severity:'watch'|'alert', reasons:<=4 short bullets, email:{subject, body<=10 lines}}."
+                + " Keep bullets crisp and grounded in provided data fields (price, change_pct, volume, attention_points)."
             )
         )
 

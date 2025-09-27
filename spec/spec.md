@@ -302,8 +302,8 @@
   - 用户输入：`normalized_posts`（title、selftext（裁剪）、score、num_comments、created_utc、flair、permalink）。
   - 输出：纯 JSON（英文）。
 - 阶段 3（Attention 与邮件）：
-  - 系统（英文）：You are a risk-control assistant. Using price/volume history, recent news, and Stage 1 attention points, decide if this stock needs attention. Apply objective signals, no subjective advice. Return only JSON: `{attention_needed, severity ('watch'|'alert'), reasons (<=4), email {subject, body (<=10 lines)}}`。
-  - 用户输入：`stage2_enriched_item`（含 30d 日线与当日 1m 分钟线）。
+  - 系统（英文，保守判定）：You are a conservative risk-control assistant. Set `attention_needed=true` ONLY if a major event exists (earnings now, M&A, SEC action, major guidance, scandal) OR at least two strong signals hold (|price_change_today| ≥ 3%, unusual volume ≥ 2x recent average, ≥ 3 credible news in 48h, concrete catalyst in Stage1 highlights). If insufficient/ambiguous, default to false. Return only JSON: `{attention_needed, severity ('watch'|'alert'), reasons (<=4), email {subject, body (<=10 lines)}}`。
+  - 用户输入：`stage2_enriched_item`（含 30d 日线与当日 1m 分钟线，Stage1 attention_points 与 discussion_highlights）。
 
 ## Attention 判定的最小信号（POC）
 - Reddit 热度：Top10 中且 `score >= 5`。
