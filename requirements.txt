@@ -10,3 +10,5 @@ yfinance
 python-dotenv
 fastapi
 uvicorn
+composio
+composio-langchain
