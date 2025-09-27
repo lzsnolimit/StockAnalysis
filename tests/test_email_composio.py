@@ -1,5 +1,11 @@
+import os
 import sys
 import types
+
+# Ensure project root is on sys.path for direct execution
+ROOT = os.path.dirname(os.path.dirname(__file__))
+if ROOT not in sys.path:
+    sys.path.append(ROOT)
 
 from utils.email_composio import send_stage3_emails
 
@@ -89,4 +95,3 @@ def test_send_stage3_emails(monkeypatch):
     # Tool calls recorded: attention items (2) * recipients (2) = 4
     calls = sys.modules["composio"].CALLS
     assert len(calls) == 4
-
