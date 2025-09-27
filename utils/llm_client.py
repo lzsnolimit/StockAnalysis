@@ -86,9 +86,13 @@ class LLMClient:
         """
         system = SystemMessage(
             content=(
-                "You are a risk-control assistant. Using price/volume history, recent news, and Stage 1 attention points, decide if this stock needs attention."
-                " Apply simple objective signals (heat, news pulses, price change, volume spikes) and produce a clear boolean result."
-                " Return only JSON: attention_needed (boolean), severity ('watch'|'alert'), reasons (<=4), email {subject, body (<=10 lines)}."
+                "You are a conservative risk-control assistant. Decide if this stock truly needs attention based on objective signals from the provided data.\n"
+                "STRICT CRITERIA (be selective): Set attention_needed=true ONLY if at least ONE MAJOR event OR at least TWO STRONG signals hold. Otherwise set false.\n"
+                "MAJOR events (any one): earnings release today/within 24h; merger/acquisition; regulatory/SEC action; major guidance change; severe outage/scandal.\n"
+                "STRONG signals (need >=2 if no major event): |price_change_today| >= 3%; unusual volume (>= 2x recent average); >= 3 credible news items in last 48h; Stage1 highlights indicate concrete catalyst (e.g., product launch, rating change).\n"
+                "If data is insufficient or ambiguous, default to attention_needed=false.\n"
+                "Severity: 'alert' only when attention_needed=true and signals are strong/major; else 'watch'.\n"
+                "Output ONLY JSON: {attention_needed:boolean, severity:'watch'|'alert', reasons:<=4 short bullets, email:{subject, body<=10 lines}}."
             )
         )
 
